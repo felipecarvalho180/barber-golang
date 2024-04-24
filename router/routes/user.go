@@ -22,6 +22,12 @@ var userRouters = []Route{
 		URI:                "/me",
 		Method:             http.MethodGet,
 		Func:               controllers.GetUser,
-		NeedAuthentication: false,
+		NeedAuthentication: true,
+	},
+	{
+		URI:                "/users",
+		Method:             http.MethodPatch,
+		Func:               controllers.UpdateUser,
+		NeedAuthentication: true,
 	},
 }
