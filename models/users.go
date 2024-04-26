@@ -6,24 +6,24 @@ import (
 	"strings"
 
 	"github.com/badoux/checkmail"
-	"gorm.io/gorm"
+	"github.com/google/uuid"
 )
 
 type User struct {
-	gorm.Model
+	Base
 	Name           string       `json:"name"`
 	Email          string       `json:"email" gorm:"uniqueIndex"`
 	Address        string       `json:"address,omitempty"`
 	Password       string       `json:"password"`
 	Token          string       `json:"token,omitempty" gorm:"-"`
-	SubscriptionID uint         `json:"-"`
+	SubscriptionID uuid.UUID    `json:"-"`
 	Subscription   Subscription `json:"subscription,omitempty" gorm:"foreignkey:UserID"`
 	Haircuts       []Haircut    `json:"haircuts,omitempty" gorm:"foreignkey:UserID"`
 	Service        []Service    `json:"service,omitempty" gorm:"foreignkey:HaircutID"`
 }
 
 type AccountUser struct {
-	ID           uint                 `json:"id"`
+	ID           uuid.UUID            `json:"id"`
 	Name         string               `json:"name"`
 	Email        string               `json:"email"`
 	Address      string               `json:"address,omitempty"`
@@ -88,7 +88,7 @@ func (user *User) Prepare(step int) error {
 
 func (user *User) GenerateAccountUser() AccountUser {
 	var subscription *AccountSubscription
-	if user.Subscription.ID != 0 {
+	if user.Subscription.ID != uuid.Nil {
 		subscription = &AccountSubscription{
 			ID:     user.Subscription.ID,
 			Status: user.Subscription.Status,

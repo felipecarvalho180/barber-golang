@@ -34,7 +34,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := helpers.GenerateToken(uint64(userDB.ID))
+	token, err := helpers.GenerateToken(userDB.ID)
 	if err != nil {
 		helpers.Error(w, http.StatusInternalServerError, err)
 		return

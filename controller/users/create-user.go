@@ -40,7 +40,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := helpers.GenerateToken(uint64(user.ID))
+	token, err := helpers.GenerateToken(user.ID)
 	if err != nil {
 		helpers.Error(w, http.StatusInternalServerError, err)
 		return

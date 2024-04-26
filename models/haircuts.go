@@ -3,15 +3,15 @@ package models
 import (
 	"errors"
 
-	"gorm.io/gorm"
+	"github.com/google/uuid"
 )
 
 type Haircut struct {
-	gorm.Model
-	Name   string  `json:"name"`
-	Price  float64 `json:"price"`
-	Status bool    `json:"status" gorm:"default:true"`
-	UserID uint64  `json:"userId" gorm:"foreignkey:UserID"`
+	Base
+	Name   string    `json:"name"`
+	Price  float64   `json:"price"`
+	Status bool      `json:"status" gorm:"default:true"`
+	UserID uuid.UUID `json:"userId" gorm:"foreignkey:UserID"`
 }
 
 func (Haircut) TableName() string {

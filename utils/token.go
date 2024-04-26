@@ -5,14 +5,14 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"strconv"
 	"strings"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/google/uuid"
 )
 
-func GenerateToken(userID uint64) (string, error) {
+func GenerateToken(userID uuid.UUID) (string, error) {
 	permissions := jwt.MapClaims{}
 	permissions["authorized"] = true
 	permissions["exp"] = time.Now().Add(time.Hour * 6).Unix()
@@ -54,21 +54,17 @@ func returnVerificationKey(token *jwt.Token) (interface{}, error) {
 	return config.SecretKey, nil
 }
 
-func ExtractUserID(r *http.Request) (uint64, error) {
+func ExtractUserID(r *http.Request) (uuid.UUID, error) {
 	tokenString := extractToken(r)
 	token, err := jwt.Parse(tokenString, returnVerificationKey)
 	if err != nil {
-		return 0, err
+		return uuid.Nil, err
 	}
 
 	if permissions, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		userID, err := strconv.ParseUint(fmt.Sprintf("%.0f", permissions["userID"]), 10, 64)
-		if err != nil {
-			return 0, err
-		}
-
+		userID, _ := uuid.Parse(fmt.Sprintf("%v", permissions["userID"]))
 		return userID, nil
 	}
 
-	return 0, errors.New("invalid token")
+	return uuid.Nil, errors.New("invalid token")
 }

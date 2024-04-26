@@ -1,9 +1,13 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Subscription struct {
-	ID        uint   `gorm:"primarykey"`
+	Base
 	Status    string `json:"status"`
 	PriceID   string `json:"priceId"`
 	CreatedAt time.Time
@@ -12,8 +16,8 @@ type Subscription struct {
 }
 
 type AccountSubscription struct {
-	ID     uint   `json:"id,omitempty"`
-	Status string `json:"status,omitempty"`
+	ID     uuid.UUID `json:"id,omitempty"`
+	Status string    `json:"status,omitempty"`
 }
 
 func (Subscription) TableName() string {
