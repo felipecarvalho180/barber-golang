@@ -11,24 +11,23 @@ import (
 
 type User struct {
 	Base
-	Name           string       `json:"name"`
-	Email          string       `json:"email" gorm:"uniqueIndex"`
-	Address        string       `json:"address,omitempty"`
-	Password       string       `json:"password"`
-	Token          string       `json:"token,omitempty" gorm:"-"`
-	SubscriptionID uuid.UUID    `json:"-"`
-	Subscription   Subscription `json:"subscription,omitempty" gorm:"foreignkey:UserID"`
-	Haircuts       []Haircut    `json:"haircuts,omitempty" gorm:"foreignkey:UserID"`
-	Service        []Service    `json:"service,omitempty" gorm:"foreignkey:HaircutID"`
+	Name           string    `json:"name"`
+	Email          string    `json:"email" gorm:"uniqueIndex"`
+	Address        string    `json:"address,omitempty"`
+	Password       string    `json:"password"`
+	Token          string    `json:"token,omitempty" gorm:"-"`
+	SubscriptionID uuid.UUID `json:"-"`
+	Haircuts       []Haircut `json:"haircuts,omitempty" gorm:"foreignkey:UserID"`
+	Service        []Service `json:"service,omitempty" gorm:"foreignkey:HaircutID"`
 }
 
 type AccountUser struct {
-	ID           uuid.UUID            `json:"id"`
-	Name         string               `json:"name"`
-	Email        string               `json:"email"`
-	Address      string               `json:"address,omitempty"`
-	Token        string               `json:"token,omitempty"`
-	Subscription *AccountSubscription `json:"subscription,omitempty"`
+	ID           uuid.UUID  `json:"id"`
+	Name         string     `json:"name"`
+	Email        string     `json:"email"`
+	Address      string     `json:"address,omitempty"`
+	Token        string     `json:"token,omitempty"`
+	Subscription *uuid.UUID `json:"subscription,omitempty"`
 }
 
 func (User) TableName() string {
@@ -87,12 +86,9 @@ func (user *User) Prepare(step int) error {
 }
 
 func (user *User) GenerateAccountUser() AccountUser {
-	var subscription *AccountSubscription
-	if user.Subscription.ID != uuid.Nil {
-		subscription = &AccountSubscription{
-			ID:     user.Subscription.ID,
-			Status: user.Subscription.Status,
-		}
+	var subscription *uuid.UUID
+	if user.SubscriptionID != uuid.Nil {
+		subscription = &user.SubscriptionID
 	} else {
 		subscription = nil
 	}
@@ -102,8 +98,8 @@ func (user *User) GenerateAccountUser() AccountUser {
 		Name:         user.Name,
 		Email:        user.Email,
 		Address:      user.Address,
-		Subscription: subscription,
 		Token:        user.Token,
+		Subscription: subscription,
 	}
 
 	return accountUser

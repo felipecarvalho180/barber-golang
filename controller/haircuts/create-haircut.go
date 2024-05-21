@@ -23,7 +23,7 @@ func CreateHaircut(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = haircut.Validate(); err != nil {
+	if err = haircut.CreateValidate(); err != nil {
 		helpers.Error(w, http.StatusBadRequest, err)
 		return
 	}

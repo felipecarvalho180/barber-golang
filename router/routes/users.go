@@ -30,4 +30,10 @@ var userRouters = []Route{
 		Func:               controllers.UpdateUser,
 		NeedAuthentication: true,
 	},
+	{
+		URI:                "/users/subscription",
+		Method:             http.MethodGet,
+		Func:               controllers.CheckSubscription,
+		NeedAuthentication: true,
+	},
 }

@@ -12,4 +12,16 @@ var haircutRouters = []Route{
 		Func:               controllers.CreateHaircut,
 		NeedAuthentication: true,
 	},
+	{
+		URI:                "/haircuts",
+		Method:             http.MethodGet,
+		Func:               controllers.GetHaircuts,
+		NeedAuthentication: true,
+	},
+	{
+		URI:                "/haircuts/{ID}",
+		Method:             http.MethodPatch,
+		Func:               controllers.UpdateHaircut,
+		NeedAuthentication: true,
+	},
 }

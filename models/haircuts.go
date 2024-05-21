@@ -18,7 +18,18 @@ func (Haircut) TableName() string {
 	return "haircuts"
 }
 
-func (haircut *Haircut) Validate() error {
+func (haircut *Haircut) CreateValidate() error {
+	if haircut.Name == "" {
+		return errors.New("nome é obrigatório")
+	}
+	if haircut.Price == 0 {
+		return errors.New("preço é obrigatório")
+	}
+
+	return nil
+}
+
+func (haircut *Haircut) UpdateValidate() error {
 	if haircut.Name == "" {
 		return errors.New("nome é obrigatório")
 	}
