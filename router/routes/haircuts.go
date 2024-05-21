@@ -24,4 +24,10 @@ var haircutRouters = []Route{
 		Func:               controllers.UpdateHaircut,
 		NeedAuthentication: true,
 	},
+	{
+		URI:                "/haircuts/{ID}",
+		Method:             http.MethodGet,
+		Func:               controllers.FindHaircut,
+		NeedAuthentication: true,
+	},
 }
